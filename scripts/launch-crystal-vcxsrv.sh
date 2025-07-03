@@ -18,7 +18,10 @@ if ! grep -qi microsoft /proc/version; then
 fi
 
 # Setup display environment
-source "$SCRIPT_DIR/vcxsrv/setup-wsl-display.sh"
+# Use localhost:0.0 which we know works with VcXsrv
+export DISPLAY=localhost:0.0
+export LIBGL_ALWAYS_INDIRECT=1
+echo "Display configured: DISPLAY=$DISPLAY"
 
 # Check if VcXsrv is running on Windows
 echo ""

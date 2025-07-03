@@ -4,16 +4,9 @@
 
 echo "Setting up WSL display environment for VcXsrv..."
 
-# Get the Windows host IP from /etc/resolv.conf
-WINDOWS_HOST=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
-
-if [ -z "$WINDOWS_HOST" ]; then
-    echo "Error: Could not determine Windows host IP" >&2
-    exit 1
-fi
-
-# Export display settings
-export DISPLAY="${WINDOWS_HOST}:0.0"
+# Use localhost for VcXsrv connection
+# This works more reliably than trying to parse the Windows host IP
+export DISPLAY="localhost:0.0"
 export LIBGL_ALWAYS_INDIRECT=1
 
 # Disable WSLg to use VcXsrv instead
@@ -43,7 +36,7 @@ echo ""
 echo "To make these settings permanent, add the following to your ~/.bashrc or ~/.zshrc:"
 echo ""
 echo "# VcXsrv Display Configuration"
-echo "export DISPLAY=\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2; exit;}'):0.0"
+echo "export DISPLAY=localhost:0.0"
 echo "export LIBGL_ALWAYS_INDIRECT=1"
 echo "unset WAYLAND_DISPLAY"
 echo ""
@@ -66,7 +59,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         else
             echo "" >> "$SHELL_CONFIG"
             echo "# VcXsrv Display Configuration" >> "$SHELL_CONFIG"
-            echo 'export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '\''{print $2; exit;}'\''):0.0' >> "$SHELL_CONFIG"
+            echo 'export DISPLAY=localhost:0.0' >> "$SHELL_CONFIG"
             echo "export LIBGL_ALWAYS_INDIRECT=1" >> "$SHELL_CONFIG"
             echo "unset WAYLAND_DISPLAY" >> "$SHELL_CONFIG"
             echo "✓ Configuration added to $SHELL_CONFIG"

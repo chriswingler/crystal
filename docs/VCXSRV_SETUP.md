@@ -2,6 +2,8 @@
 
 This guide will help you set up VcXsrv as an alternative to WSLg for running Crystal with better window management and performance on Windows.
 
+> **Note**: WSL2 has significant network isolation that makes VcXsrv integration challenging. For detailed findings and current limitations, see [VcXsrv WSL2 Learnings](VCXSRV_WSL2_LEARNINGS.md). WSLg (the default) currently provides the most reliable experience.
+
 ## Why VcXsrv?
 
 While WSLg (Windows Subsystem for Linux GUI) works out of the box, VcXsrv offers several advantages for Electron applications like Crystal:
@@ -135,6 +137,15 @@ This script will:
 
 ## Troubleshooting
 
+### Quick Diagnostic Tool
+
+Run our comprehensive diagnostic script:
+```bash
+./scripts/vcxsrv/debug-display.sh
+```
+
+This will test all display configurations and recommend the best settings.
+
 ### "Cannot open display" Error
 
 1. Check if VcXsrv is running:
@@ -145,13 +156,40 @@ This script will:
 2. Verify DISPLAY variable:
    ```bash
    echo $DISPLAY
-   # Should show something like: 172.23.144.1:0.0
+   # Should show: localhost:0.0
    ```
 
 3. Test connectivity:
    ```bash
-   nc -zv $(cat /etc/resolv.conf | grep nameserver | awk '{print $2}') 6000
+   nc -zv localhost 6000
    ```
+
+### Electron Fails But X11 Apps Work
+
+This is a common issue where xeyes/xclock work but Electron fails. Solutions:
+
+1. **Use Direct Launch Script** (Recommended):
+   ```bash
+   ./scripts/run-crystal-direct.sh
+   ```
+   This script bypasses npm environment issues.
+
+2. **Use Electron Wrapper**:
+   ```bash
+   ./scripts/vcxsrv/electron-wrapper.sh
+   ```
+
+3. **Use VcXsrv-specific npm script**:
+   ```bash
+   pnpm run dev:vcxsrv
+   ```
+
+### Environment Variables Not Passing
+
+The issue often occurs when npm/pnpm strips environment variables. Our scripts work around this by:
+- Setting environment variables explicitly
+- Using `exec` to ensure proper inheritance
+- Bypassing npm layers when necessary
 
 ### Window Scaling Issues
 
@@ -229,3 +267,50 @@ If you want to switch back to WSLg:
 | Best For | Simple apps | Electron apps |
 
 For Crystal and other Electron applications, VcXsrv generally provides a better experience despite the additional setup required.
+
+## Available Scripts and Configurations
+
+Crystal provides several scripts and configurations to help with VcXsrv setup:
+
+### Launch Scripts
+
+1. **`scripts/run-crystal-direct.sh`** - Direct launcher that bypasses npm (Recommended)
+   - Auto-detects working display
+   - Handles environment setup
+   - Starts VcXsrv if needed
+
+2. **`scripts/vcxsrv/electron-wrapper.sh`** - Wrapper ensuring proper environment
+   - Explicitly sets all environment variables
+   - Tests X11 connection before launching
+   - Manages frontend lifecycle
+
+3. **`scripts/launch-crystal-vcxsrv.sh`** - Original launcher
+   - Comprehensive setup and checks
+   - Uses setup-wsl-display.sh
+
+### Diagnostic Tools
+
+- **`scripts/vcxsrv/debug-display.sh`** - Comprehensive display debugging
+  - Tests multiple DISPLAY values
+  - Checks VcXsrv status
+  - Provides recommendations
+
+### Configuration Files
+
+1. **`scripts/vcxsrv/config.xlaunch`** - Default VcXsrv configuration
+2. **`scripts/vcxsrv/config-electron.xlaunch`** - Optimized for Electron apps
+3. **`scripts/vcxsrv/config-debug.xlaunch`** - With verbose logging
+4. **`scripts/vcxsrv/config-single.xlaunch`** - Single window mode
+
+### Windows Tools
+
+- **`scripts/vcxsrv/crystal-vcxsrv.bat`** - Windows batch file
+  - Starts VcXsrv from Windows
+  - Provides WSL instructions
+  - Checks installation
+
+### NPM Scripts
+
+Added to package.json:
+- `pnpm run dev:vcxsrv` - Run with DISPLAY=localhost:0.0
+- `pnpm run dev:vcxsrv-debug` - Run with debugging enabled

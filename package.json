@@ -20,6 +20,8 @@
   },
   "scripts": {
     "dev": "pnpm run electron-dev",
+    "dev:vcxsrv": "DISPLAY=localhost:0.0 pnpm run electron-dev",
+    "dev:vcxsrv-debug": "DISPLAY=localhost:0.0 ELECTRON_ENABLE_LOGGING=1 pnpm run electron-dev",
     "electron-dev": "concurrently \"pnpm run --filter frontend dev\" \"wait-on http://localhost:4521 && electron .\"",
     "electron-dev:custom": "concurrently \"pnpm run --filter frontend dev\" \"wait-on http://localhost:4521 && electron .\"",
     "build": "pnpm run build:frontend && pnpm run build:main && pnpm run build:electron",
