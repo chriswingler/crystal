@@ -103,6 +103,22 @@ pnpm run setup
 pnpm run electron-dev
 ```
 
+### Running on Windows with WSL
+
+Crystal works great in WSL2 with GUI support. For the best experience on Windows, we recommend using VcXsrv instead of the built-in WSLg:
+
+1. **Install VcXsrv** on Windows from [marchaesen's releases](https://github.com/marchaesen/vcxsrv/releases)
+2. **Configure WSL** - Run our setup script:
+   ```bash
+   ./scripts/vcxsrv/setup-wsl-display.sh
+   ```
+3. **Launch Crystal** with VcXsrv:
+   ```bash
+   ./scripts/launch-crystal-vcxsrv.sh
+   ```
+
+For detailed instructions, see our [VcXsrv Setup Guide](docs/VCXSRV_SETUP.md). This provides better window management and performance compared to WSLg.
+
 ## Building for Production
 
 ```bash

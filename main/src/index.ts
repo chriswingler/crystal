@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import * as path from 'path';
+import windowStateKeeper from 'electron-window-state';
 import { TaskQueue } from './services/taskQueue';
 import { SessionManager } from './services/sessionManager';
 import { ConfigManager } from './services/configManager';
@@ -73,20 +74,37 @@ if (isDevelopment) {
 }
 
 async function createWindow() {
+  // Load the previous window state with defaults
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1400,
+    defaultHeight: 900
+  });
+
   mainWindow = new BrowserWindow({
-    width: 1400,
-    height: 900,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    minWidth: 800,
+    minHeight: 600,
+    resizable: true,
+    maximizable: true,
     icon: path.join(__dirname, '../assets/icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false
     },
+    // Better frame handling for Linux/WSL
+    frame: process.platform !== 'darwin',
     ...(process.platform === 'darwin' ? {
       titleBarStyle: 'hiddenInset',
       trafficLightPosition: { x: 10, y: 10 }
     } : {})
   });
+
+  // Let us manage the window state
+  mainWindowState.manage(mainWindow);
 
   if (isDevelopment) {
     await mainWindow.loadURL('http://localhost:4521');

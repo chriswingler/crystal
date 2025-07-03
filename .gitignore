@@ -44,6 +44,11 @@ pids/
 .DS_Store
 Thumbs.db
 
+# VcXsrv
+*.xlaunch.log
+vcxsrv-*.log
+.vcxsrv-display
+
 # Testing
 coverage/
 .nyc_output/

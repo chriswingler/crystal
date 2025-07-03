@@ -251,6 +251,9 @@ importers:
       electron-rebuild:
         specifier: ^3.2.9
         version: 3.2.9
+      electron-window-state:
+        specifier: ^5.0.3
+        version: 5.0.3
       eslint:
         specifier: ^9.17.0
         version: 9.28.0(jiti@1.21.7)
@@ -2194,6 +2197,10 @@ packages:
 
   electron-updater@6.6.2:
     resolution: {integrity: sha512-Cr4GDOkbAUqRHP5/oeOmH/L2Bn6+FQPxVLZtPbcmKZC63a1F3uu5EefYOssgZXG3u/zBlubbJ5PJdITdMVggbw==}
+
+  electron-window-state@5.0.3:
+    resolution: {integrity: sha512-1mNTwCfkolXl3kMf50yW3vE2lZj0y92P/HYWFBrb+v2S/pCka5mdwN3cagKm458A7NjndSwijynXgcLWRodsVg==}
+    engines: {node: '>=8.0.0'}
 
   electron@36.4.0:
     resolution: {integrity: sha512-LLOOZEuW5oqvnjC7HBQhIqjIIJAZCIFjQxltQGLfEC7XFsBoZgQ3u3iFj+Kzw68Xj97u1n57Jdt7P98qLvUibQ==}
@@ -6671,6 +6678,11 @@ snapshots:
       tiny-typed-emitter: 2.1.0
     transitivePeerDependencies:
       - supports-color
+
+  electron-window-state@5.0.3:
+    dependencies:
+      jsonfile: 4.0.0
+      mkdirp: 0.5.6
 
   electron@36.4.0:
     dependencies:
