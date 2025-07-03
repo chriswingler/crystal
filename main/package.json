@@ -8,7 +8,7 @@
     "dev": "tsc -w",
     "build": "rimraf dist && tsc && npm run copy:assets && npm run bundle:mcp",
     "bundle:mcp": "node build-mcp-bridge.js",
-    "copy:assets": "mkdirp dist/database/migrations && cp src/database/*.sql dist/database/ && cp src/database/migrations/*.sql dist/database/migrations/",
+    "copy:assets": "mkdirp dist/database/migrations && cpx src/database/*.sql dist/database && cpx src/database/migrations/*.sql dist/database/migrations/",
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit"
   },
@@ -19,6 +19,7 @@
     "@modelcontextprotocol/sdk": "^1.12.1",
     "better-sqlite3": "^11.7.0",
     "bull": "^4.16.3",
+    "cpx": "^1.5.0",
     "dotenv": "^16.4.7",
     "electron-store": "^10.0.0",
     "electron-updater": "^6.6.2"

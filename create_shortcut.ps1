@@ -1,0 +1,1 @@
+$ws = New-Object -ComObject WScript.Shell; $desktopPath = [Environment]::GetFolderPath('Desktop'); $s = $ws.CreateShortcut("$desktopPath\Crystal.lnk"); $s.TargetPath = "$PSScriptRoot\dist-electron\win-unpacked\Crystal.exe"; $s.Save()
